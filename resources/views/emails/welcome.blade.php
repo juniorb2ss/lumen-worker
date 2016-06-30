@@ -1,1 +1,1 @@
-Welcome to application, {{ $data->get('name') }}!
+Welcome to application, {{ $data['name'] }}!

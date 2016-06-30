@@ -31,13 +31,13 @@ class SendEmailController extends Controller {
 		if ($request->isJson() && $request->json()->count() && $this->isArrayConteinsData($request)) {
 
 			// prepare data to view
-			$data = $request->json();
+			$data = $request->json()->get('data');
 
 			// Send email
 			Mail::send('emails.welcome', ['data' => $data], function ($m) use ($data) {
 				$m->from('hello@app.com', 'Welcome to application!');
 
-				$m->to($data->get('email'), $data->get('name'))->subject('Welcome!');
+				$m->to($data['email'], $data['name'])->subject('Welcome!');
 			});
 
 			// return empty content with http response 200
@@ -56,6 +56,6 @@ class SendEmailController extends Controller {
 	 * @return boolean       [description]
 	 */
 	private function isArrayConteinsData(Request $request) {
-		return $request->json()->has('name') && $request->json()->has('email');
+		return array_has($request->json()->all(), 'data.name') && array_has($request->json()->all(), 'data.email');
 	}
 }
